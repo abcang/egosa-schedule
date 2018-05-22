@@ -5,6 +5,8 @@ require 'dotenv'
 require 'twitter'
 require_relative './lib/slack_poster'
 
+STDOUT.sync = true
+
 module EgosaSchedule
   class << self
     def run(envfile)
