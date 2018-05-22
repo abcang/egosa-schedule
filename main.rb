@@ -51,7 +51,7 @@ module EgosaSchedule
     def match?(status)
       return false if status.retweet?
 
-      text = CGI.unescapeHTML(status.full_text).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
+      text = CGI.unescapeHTML(status.attrs[:full_text]).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
       text.match?(%r!(\d:\d\d)|(\d/\d{1,2})|(\d[時じ日(にち)])|(配信)|(生放送)|(延期)!)
     end
 
@@ -59,7 +59,7 @@ module EgosaSchedule
       loop do
         sleep 30 if @since_id
 
-        options = { count: 100 }
+        options = { count: 100, tweet_mode: 'extended' }
         options[:since_id] = @since_id if @since_id
         statuses = client.list_timeline('abcang1015', 'egosa-schedule', options)
         next if statuses.empty?
