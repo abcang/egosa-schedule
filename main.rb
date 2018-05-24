@@ -54,7 +54,7 @@ module EgosaSchedule
       return false if status.retweet?
 
       text = CGI.unescapeHTML(status.attrs[:full_text]).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
-      text.match?(%r!(\d:\d\d)|(\d/\d{1,2})|(\d(時|じ|日|(にち)))|(配信)|(生放送)|(出演)|(延期)|(中止)!)
+      text.match?(%r!(\d:\d\d)|(\d/\d{1,2})|(\d(時|じ|日|(にち)))|(配信)|(放送)|(出演)|(延期)|(中止)!)
     end
 
     def start_egosa
