@@ -72,7 +72,7 @@ module EgosaSchedule
         @since_id = statuses.first.id
         next unless before_since_id
 
-        statuses.each do |status|
+        statuses.reverse_each do |status|
           poster.post_status(status) if match?(status)
         end
       end
