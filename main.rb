@@ -50,10 +50,24 @@ module EgosaSchedule
       @poster ||= SlackPoster.new(ENV['WEBHOOK_URL'])
     end
 
+    def filtered_full_text(status)
+      original_full_text = status.attrs[:full_text]
+      unescaped_full_text = ''
+      start_position = 0
+
+      (status.media + status.uris + status.user_mentions).map(&:indices).uniq.sort_by { |s, _| s }.each do |s, e|
+        unescaped_full_text = unescaped_full_text + original_full_text[start_position...s]
+        start_position = e
+      end
+      unescaped_full_text = unescaped_full_text + original_full_text[start_position...original_full_text.length]
+
+      CGI.unescapeHTML(unescaped_full_text)
+    end
+
     def match?(status)
       return false if status.retweet?
 
-      text = CGI.unescapeHTML(status.attrs[:full_text]).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
+      text = filtered_full_text(status).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
       text.match?(%r{\d{4}|\d:\d\d|\d/\d\d?|\d(時|じ|日|にち|分|ふん)|配信|放送|出演|延期|中止|コラボ})
     end
 
