@@ -55,7 +55,7 @@ module EgosaSchedule
       unescaped_full_text = ''
       start_position = 0
 
-      (status.media + status.uris + status.user_mentions).map(&:indices).uniq.sort_by { |s, _| s }.each do |s, e|
+      (status.media + status.uris + status.user_mentions + user_mentions.hashtags).map(&:indices).uniq.sort_by { |s, _| s }.each do |s, e|
         unescaped_full_text = unescaped_full_text + original_full_text[start_position...s]
         start_position = e
       end
@@ -66,7 +66,7 @@ module EgosaSchedule
 
     def regexp
       @regexp ||= Regexp.new(%w[
-        \d{4}
+        (?<!\d)\d{4}(\s|に|から|〜|$)
         \d:\d\d
         \d/\d\d?
         \d(時|じ|日|にち|分|ふん)(?!間)
@@ -81,7 +81,7 @@ module EgosaSchedule
     def match?(status)
       return false if status.retweet?
 
-      text = filtered_full_text(status).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
+      text = filtered_full_text(status).tr('０-９ａ-ｚＡ-Ｚ：　', '0-9a-zA-Z: ')
       text.match?(regexp)
     end
 
