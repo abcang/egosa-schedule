@@ -64,11 +64,25 @@ module EgosaSchedule
       CGI.unescapeHTML(unescaped_full_text)
     end
 
+    def regexp
+      @regexp ||= Regexp.new(%w[
+        \d{4}
+        \d:\d\d
+        \d/\d\d?
+        \d(時|じ|日|にち|分|ふん)(?!間)
+        延期
+        中止
+        休み
+        変更
+        ゲリラ
+      ].join('|'))
+    end
+
     def match?(status)
       return false if status.retweet?
 
       text = filtered_full_text(status).tr('０-９ａ-ｚＡ-Ｚ：', '0-9a-zA-Z:')
-      text.match?(%r{\d{4}|\d:\d\d|\d/\d\d?|\d(時|じ|日|にち|分|ふん)|延期|中止|休み|変更|ゲリラ})
+      text.match?(regexp)
     end
 
     def start_egosa
