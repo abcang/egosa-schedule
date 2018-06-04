@@ -91,7 +91,7 @@ module EgosaSchedule
 
         options = { count: 100, tweet_mode: 'extended' }
         options[:since_id] = @since_id if @since_id
-        statuses = client.list_timeline('abcang1015', 'egosa-schedule', options)
+        statuses = client.list_timeline(ENV.fetch('LIST_USER'), 'abcang1015', ENV.fetch('LIST_NAME'), options)
         next if statuses.empty?
 
         puts "[#{Time.now.localtime('+09:00').strftime('%F %T')}]new statuses: #{statuses.size}"
