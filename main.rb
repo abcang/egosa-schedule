@@ -55,7 +55,7 @@ module EgosaSchedule
       unescaped_full_text = ''
       start_position = 0
 
-      (status.media + status.uris + status.user_mentions + user_mentions.hashtags).map(&:indices).uniq.sort_by { |s, _| s }.each do |s, e|
+      (status.media + status.uris + status.user_mentions + status.hashtags).map(&:indices).uniq.sort_by { |s, _| s }.each do |s, e|
         unescaped_full_text = unescaped_full_text + original_full_text[start_position...s]
         start_position = e
       end
